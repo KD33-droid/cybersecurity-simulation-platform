@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  sqli-web:
+    build: ./web
+    container_name: sqli-web
+    ports:
+      - "5050:5000"

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Starting Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Starting DDoS Lab...</h1>
+<p>Please wait while containers are starting.</p>
+<div id="msg">Initializing...</div>
+
+<script>
+async function startLab(){
+  try{
+    let r = await fetch("http://localhost:8000/start-ddos",{method:"POST"})
+    let d = await r.json()
+
+    if(d.success){
+        checkReady()
+    }else{
+        document.getElementById("msg").innerText =
+        "Error: " + d.message
+    }
+  }catch{
+    document.getElementById("msg").innerText =
+    "Backend not reachable"
+  }
+}
+
+async function checkReady(){
+  let tries = 0
+
+  let interval = setInterval(async ()=>{
+    let r = await fetch("http://localhost:8000/lab-status")
+    let d = await r.json()
+
+    if(d.running){
+        clearInterval(interval)
+        window.location = "lab_ready.html"
+    }
+
+    if(tries++ > 20){
+        clearInterval(interval)
+        document.getElementById("msg").innerText =
+        "Lab failed to start"
+    }
+  },2000)
+}
+
+startLab()
+</script>
+
+</body>
+</html>

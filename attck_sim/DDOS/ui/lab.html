@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DDoS Detection Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>DDoS Detection Lab</h1>
+
+<div class="card">
+  <h3>Step 1 – Open These URLs</h3>
+
+  <p>Open the following in new tabs to observe the simulation.</p>
+
+  <b>Target Server</b><br>
+  <input id="targetUrl" value="http://localhost:8080" readonly>
+  <button onclick="copy('targetUrl')">Copy</button>
+  <br><br>
+
+  <b>Attack Simulator</b><br>
+  <input id="simulatorUrl" value="http://localhost:4000" readonly>
+  <button onclick="copy('detectorUrl')">Copy</button>
+
+  <br><br>
+
+  <button onclick="stopLab()">Stop Lab</button>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+function copy(id){
+  let text = document.getElementById(id).value;
+  navigator.clipboard.writeText(text);
+  alert("Copied: " + text);
+}
+
+function startLab(){
+  document.querySelector(".card").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+}
+</script>
+
+</body>
+</html>

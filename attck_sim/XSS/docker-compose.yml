@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  xss-web:
+    build: ./web
+    container_name: xss-web
+    ports:
+      - "7070:5000"

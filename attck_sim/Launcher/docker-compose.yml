@@ -1,0 +1,12 @@
+services:
+  launcher:
+    build: .
+    container_name: lab-launcher
+    ports:
+      - "5000:5000"
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ..:/workspace
+
+    working_dir: /workspace/Launcher

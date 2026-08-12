@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  target:
+    build: ./target
+    container_name: lab-target
+    ports:
+      - "8080:80"          # access target from browser
+    networks:
+      - labnet
+
+  simulator:
+    build: ./simulator
+    container_name: lab-simulator
+    ports:
+      - "4000:3000"        # expose simulator UI
+    environment:
+      - TARGET_URL=http://target
+      - MODE=normal        # normal | high
+    depends_on:
+      - target
+    networks:
+      - labnet
+
+  detector:
+    build: ./detector
+    container_name: lab-detector
+    ports:
+      - "9000:9000"
+    networks:
+      - labnet
+
+networks:
+  labnet:
+    driver: bridge

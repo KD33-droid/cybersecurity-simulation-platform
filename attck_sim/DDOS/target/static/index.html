@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Acme Corp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+        header {
+            background: #1f2933;
+            color: white;
+            padding: 20px;
+        }
+        nav {
+            background: #e5e7eb;
+            padding: 15px 20px;
+        }
+        nav button {
+            margin-right: 10px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #374151;
+            color: white;
+        }
+        nav button:hover {
+            background: #111827;
+        }
+        .container {
+            padding: 30px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Acme Corp</h1>
+    <p>Secure Digital Services Platform</p>
+</header>
+
+<nav>
+    <button onclick="navigate('home')">Home</button>
+    <button onclick="navigate('about')">About</button>
+    <button onclick="navigate('services')">Services</button>
+    <button onclick="navigate('contact')">Contact</button>
+</nav>
+
+<div class="container">
+    <div id="content" class="card">
+        <h2>Welcome</h2>
+        <p>Click the navigation buttons to explore our platform.</p>
+    </div>
+</div>
+
+<script>
+    async function navigate(section) {
+        try {
+            // 🔒 Always hit backend for content
+            const response = await fetch(`/content/${section}`);
+
+            // 🚨 Backend-enforced outage
+            if (response.status === 503) {
+                window.location.reload(); // backend serves down.html
+                return;
+            }
+
+            const data = await response.json();
+
+            document.getElementById("content").innerHTML = `
+                <h2>${data.title}</h2>
+                <p>${data.body}</p>
+            `;
+        } catch (err) {
+            // Any error → force reload → backend decides
+            window.location.reload();
+        }
+    }
+
+    // 🔍 Continuous backend watchdog
+    setInterval(async () => {
+        try {
+            const res = await fetch("/state");
+            const data = await res.json();
+            if (data.state === "ALERT") {
+                window.location.reload();
+            }
+        } catch {
+            window.location.reload();
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
