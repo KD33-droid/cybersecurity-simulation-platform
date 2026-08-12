@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  auth-web:
+    build: ./web
+    container_name: auth-web
+    ports:
+      - "6060:5000"
